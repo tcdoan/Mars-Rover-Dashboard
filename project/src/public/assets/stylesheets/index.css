@@ -11,11 +11,14 @@ body {
 }
 
 .photo-group {
-  margin: 5%;
+  min-width: 100%;
+  margin: 0;
+  padding: 0%;
 }
 
-image {
-  width: 80ch;
+img {
+  max-width: 100%;
+  min-width: 80%;
 }
 
 button {
@@ -29,7 +32,6 @@ button {
 }
 
 header {
-  /* header styles */
   width: 100%;
 }
 
@@ -43,19 +45,25 @@ footer {
   padding-top: 3vh;
 }
 
+#stats {
+  padding-bottom: 3vh;
+}
+
 /* -------------------  TABLET  --------------------- */
+
 @media (min-width: 768px) {
   /* use mobile */
-}
+  #photos {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    min-width: 100%;
+    margin: 0;
+    padding: 0%;
+  }
 
-/* -------------------  DESKTOP  -------------------- */
-
-@media (min-width: 1224px) {
-  /* use mobile */
-}
-
-/* -------------------  LARGE SCREENS  -------------- */
-
-@media (min-width: 1824px) {
-  /* use mobile */
+  .photo-group {
+    min-width: 350px;
+    max-width: 25%;
+  }
 }
