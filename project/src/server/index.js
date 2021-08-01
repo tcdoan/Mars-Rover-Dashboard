@@ -1,4 +1,5 @@
 require('dotenv').config()
+const Immutable = require('immutable');
 const express = require('express')
 const bodyParser = require('body-parser')
 const fetch = require('node-fetch')
@@ -13,16 +14,28 @@ app.use(bodyParser.json())
 app.use('/', express.static(path.join(__dirname, '../public')))
 
 // your API calls
-
-// example API call
-app.get('/apod', async (req, res) => {
+app.get('/rover/:name', async (req, res) => {
     try {
-        let image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
+        const fetchURI = `https://api.nasa.gov/mars-photos/api/v1/manifests/${req.params.name}/?api_key=${process.env.API_KEY}`
+        console.log('fetchURI: ', fetchURI)
+        await fetch(fetchURI)
             .then(res => res.json())
-        res.send({ image })
+            .then(data => res.send(Immutable.Map(data.photo_manifest)));
     } catch (err) {
-        console.log('error:', err);
+        console.log('error: ', err);
     }
-})
+});
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.get('/rover/:name/:date', async (req, res) => {
+    try {
+        const uri = `https://api.nasa.gov/mars-photos/api/v1/rovers/${req.params.name}/photos?earth_date=${req.params.date}&api_key=${process.env.API_KEY}`
+        console.log(uri)
+        await fetch(uri)
+            .then(res => res.json())
+            .then(data => res.send(Immutable.List(data.photos)));
+    } catch (err) {
+        console.log('error: ', err);
+    }
+});
+
+app.listen(port, () => console.log(`Mar Rover Dashboard app listening on port ${port}!`))
